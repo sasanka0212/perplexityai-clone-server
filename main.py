@@ -4,6 +4,8 @@ from pydantic_models.chat_body import ChatBody
 from services.search_service import SearchService
 from services.sort_source_service import SortSourceService
 from services.llm_service import LLMService
+import uvicorn
+import os
 
 app = FastAPI()
 
@@ -51,3 +53,7 @@ def chat_endpoint(body: ChatBody):
     # convert them using LLM output
     response = llm_service.generate_response(body.query, sorted_results)
     return response
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))  # like Node.js fallback
+    uvicorn.run(app, host="0.0.0.0", port=port)
